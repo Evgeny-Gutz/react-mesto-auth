@@ -10,6 +10,7 @@ import Footer from './Footer';
 import api from "../utils/Api";
 import {UserContext} from '../contexts/CurrentUserContext.js';
 import ImagePopup from './ImagePopup';
+import Registr from "./Register";
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -132,6 +133,7 @@ function App() {
             <Route path="/sign-up" element={
                 <>
                     <Header loggedIn={loggedIn}/>
+                    <Registr />
                 </>
             } />
             <Route path="/sign-in" element={<></>} />
