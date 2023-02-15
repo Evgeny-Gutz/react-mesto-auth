@@ -106,7 +106,7 @@ function App() {
     return (
         <UserContext.Provider value={currentUser}>
         <Routes>
-            <Route path="/123" element={
+            <Route path="/hidden" element={
                 <>
                     <Header />
                     <Main
@@ -129,11 +129,12 @@ function App() {
                         onClose={closeAllPopups} />
                 </>
             } />
-            <Route path="/" element={
+            <Route path="/sign-up" element={
                 <>
                     <Header loggedIn={loggedIn}/>
                 </>
             } />
+            <Route path="/sign-in" element={<></>} />
         </Routes>
         </UserContext.Provider>
   );
