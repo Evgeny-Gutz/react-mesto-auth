@@ -1,5 +1,5 @@
 .header__logo {
-    max-width: 148px;
+    min-width: 148px;
     min-height: 34px;
     background-image: url(../../../images/Vector.svg);
     background-size: cover;
