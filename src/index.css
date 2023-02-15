@@ -27,12 +27,13 @@
 @import url(./blocks/popup/__submit/_del/popup__submit_del.css);
 @import url(./blocks/popup/__submit/_inactive/popup__submit_inactive.css);
 
-@import url(./blocks/registr/registr.css);
-@import url(./blocks/registr/__form/registr__form.css);
-@import url(./blocks/registr/__title/registr__title.css);
-@import url(./blocks/registr/__input/registr__input.css);
-@import url(./blocks/registr/__submit/registr__submit.css);
-@import url(./blocks/registr/__link-to/registr__link-to.css);
+@import url(blocks/submission-form/submission-form.css);
+@import url(blocks/submission-form/__form/submission-form__form.css);
+@import url(blocks/submission-form/__title/submission-form__title.css);
+@import url(blocks/submission-form/__input/submission-form__input.css);
+@import url(blocks/submission-form/__submit/submission-form__submit.css);
+
+@import url(blocks/registor/__link-to/registr__link-to.css);
 
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);

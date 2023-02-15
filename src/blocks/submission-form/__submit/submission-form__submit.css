@@ -1,4 +1,6 @@
-.registr__submit {
+.submission-form__submit {
+    padding: 0;
+    margin: 216px 0 0 0;
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -8,10 +10,9 @@
     border-radius: 2px;
     background-color: #ffffff;
     border: none;
-    margin-top: 216px;
 }
 
-.registr__submit:hover {
+.submission-form__submit:hover {
     opacity: .85;
     cursor: pointer;
 

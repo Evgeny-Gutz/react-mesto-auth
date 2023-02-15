@@ -10,7 +10,8 @@ import Footer from './Footer';
 import api from "../utils/Api";
 import {UserContext} from '../contexts/CurrentUserContext.js';
 import ImagePopup from './ImagePopup';
-import Registr from "./Register";
+import Register from "./Register";
+import Login from "./Login";
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -130,13 +131,9 @@ function App() {
                         onClose={closeAllPopups} />
                 </>
             } />
-            <Route path="/sign-up" element={
-                <>
-                    <Header loggedIn={loggedIn}/>
-                    <Registr />
-                </>
-            } />
-            <Route path="/sign-in" element={<></>} />
+            <Route path="/sign-up" element={<Register />}/>
+            <Route path="/sign-in" element={<Login />}/>
+            <Route path="*" element={!loggedIn && <Login />}/>
         </Routes>
         </UserContext.Provider>
   );

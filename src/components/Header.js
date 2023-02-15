@@ -1,12 +1,13 @@
-function Header({loggedIn}) {
+import {Link} from "react-router-dom";
+
+function Header({buttonName}) {
 
     return (
         <header className="header">
             <div className="header__logo"></div>
-            {loggedIn ?
-                <><span>email</span><button className="header__button">Выйти</button></>:
-                <button className="header__button">Войти</button>
-
+            {buttonName === "Регистрация" ?
+                <Link to="/sign-up"><button className="header__button">{buttonName}</button></Link>:
+                <Link to="/sign-in"><button className="header__button">{buttonName}</button></Link>
             }
         </header>
     );

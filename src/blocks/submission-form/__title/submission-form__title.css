@@ -1,4 +1,4 @@
-.registr__title {
+.submission-form__title {
     margin: 0;
     padding: 0 0 20px 0;
     font-style: normal;
@@ -10,7 +10,7 @@
 }
 
 @media screen and (max-width: 660px) {
-    .registr__title {
+    .submission-form__title {
         margin-bottom: 75px;
         font-size: 18px;
         line-height: 1.22;
