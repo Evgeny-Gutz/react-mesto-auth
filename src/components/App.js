@@ -12,12 +12,14 @@ import ImagePopup from './ImagePopup';
 import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
     const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
     const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState({isVisible:false, name: "", link: ""});
+    const [isSuccessfulRegistrationPopupOpen, setSuccessfulRegistrationPopupOpen] = useState(false);
     const [currentUser, setCurrentUser] = useState({});
     const [cards, setCards] = useState([]);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -27,6 +29,7 @@ function App() {
         setEditProfilePopupOpen(false);
         setAddPlacePopupOpen(false);
         setSelectedCard({...selectedCard, isVisible: false});
+        setSuccessfulRegistrationPopupOpen(false);
     }
 
     useEffect(()=> {
@@ -35,6 +38,7 @@ function App() {
             .catch(error => console.log(`Ошибка при загрузке карточек: ${error}`))
     }, []);
     useEffect(() => {
+        setSuccessfulRegistrationPopupOpen(true);
         api.getDataUser()
             .then(res => setCurrentUser(res))
             .catch(error => console.log(`Ошибка при загрузке карточек: ${error}`))
@@ -124,12 +128,14 @@ function App() {
                         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
                         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleUpdatePlace} />
                         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+                        <InfoTooltip isOpen={isSuccessfulRegistrationPopupOpen} onClose={closeAllPopups} itsOk={false}/>
                         <ImagePopup
                             onOpen={handleCardClick}
                             card={selectedCard}
                             onClose={closeAllPopups} />
                     </>
                 } />
+
                 <Route path="/sign-up" element={<Register />}/>
                 <Route path="/sign-in" element={<Login />}/>
                 <Route path="/" element={<ProtectedRoute element={<Login />} loggedIn={loggedIn}/> } />

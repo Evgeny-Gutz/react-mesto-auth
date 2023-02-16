@@ -26,6 +26,10 @@
 @import url(./blocks/popup/__submit/popup__submit.css);
 @import url(./blocks/popup/__submit/_del/popup__submit_del.css);
 @import url(./blocks/popup/__submit/_inactive/popup__submit_inactive.css);
+@import url(./blocks/popup/__circle/popup__circle.css);
+@import url(./blocks/popup/__circle/_successful/popup__circle_successful.css);
+@import url(./blocks/popup/__circle/_successful/popup__circle_not-successful.css);
+@import url(./blocks/popup/__span/popup__span.css);
 
 @import url(blocks/submission-form/submission-form.css);
 @import url(blocks/submission-form/__form/submission-form__form.css);
