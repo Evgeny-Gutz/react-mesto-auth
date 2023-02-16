@@ -1,7 +1,6 @@
 import React from 'react';
 import {useEffect, useState} from "react";
 import { Route, Routes} from "react-router-dom";
-import Header from './Header';
 import Main from './Main';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -12,6 +11,7 @@ import {UserContext} from '../contexts/CurrentUserContext.js';
 import ImagePopup from './ImagePopup';
 import Register from "./Register";
 import Login from "./Login";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -101,40 +101,39 @@ function App() {
             .then(newCard => setCards([newCard, ...cards]))
             .catch(error => console.log(`Ошибка при добавлении новой картоки: ${error}`))
     }
-    function handleSubmitLogin() {
-        setLoggedIn(true);
-    }
+    // function handleSubmitLogin() {
+    //     setLoggedIn(true);
+    // }
 
     return (
         <UserContext.Provider value={currentUser}>
-        <Routes>
-            <Route path="/hidden" element={
-                <>
-                    <Header />
-                    <Main
-                        onEditProfile={handleEditProfileClick}
-                        onAddPlace={handleAddPlaceClick}
-                        onEditAvatar={handleEditAvatarClick}
-                        onCardClick={handleCardClick}
-                        onCardLike={handleCardLike}
-                        onCardDislike={handleCardDislike}
-                        onCardDelete={handleCardDelete}
-                        cards={cards}
-                        setCards={setCards} />
-                    <Footer />
-                    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-                    <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleUpdatePlace} />
-                    <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-                    <ImagePopup
-                        onOpen={handleCardClick}
-                        card={selectedCard}
-                        onClose={closeAllPopups} />
-                </>
-            } />
-            <Route path="/sign-up" element={<Register />}/>
-            <Route path="/sign-in" element={<Login />}/>
-            <Route path="*" element={!loggedIn && <Login />}/>
-        </Routes>
+            <Routes>
+                <Route path="/hidden" element={
+                    <>
+                        <Main
+                            onEditProfile={handleEditProfileClick}
+                            onAddPlace={handleAddPlaceClick}
+                            onEditAvatar={handleEditAvatarClick}
+                            onCardClick={handleCardClick}
+                            onCardLike={handleCardLike}
+                            onCardDislike={handleCardDislike}
+                            onCardDelete={handleCardDelete}
+                            cards={cards}
+                            setCards={setCards} />
+                        <Footer />
+                        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+                        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleUpdatePlace} />
+                        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+                        <ImagePopup
+                            onOpen={handleCardClick}
+                            card={selectedCard}
+                            onClose={closeAllPopups} />
+                    </>
+                } />
+                <Route path="/sign-up" element={<Register />}/>
+                <Route path="/sign-in" element={<Login />}/>
+                <Route path="/" element={<ProtectedRoute element={<Login />} loggedIn={loggedIn}/> } />
+            </Routes>
         </UserContext.Provider>
   );
 }
