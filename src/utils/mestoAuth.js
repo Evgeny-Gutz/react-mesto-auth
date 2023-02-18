@@ -24,24 +24,12 @@ export const register = ({password, email}) => {
      });
  }
 
-// export const tokenValidity = (jwt) => {
-//     return fetch(`${BASE_URL}/users/me`, {
-//         method: 'GET',
-//         headers: {
-//             'Content-Type': "application/json",
-//             "Authorization" : `Bearer ${jwt}`
-//         }
-//     }).then((response) => {
-//         try {
-//             if (response.ok){
-//                 return response.json();
-//             }
-//         } catch(e){
-//             return (e)
-//         }
-//     })
-//       .then((res) => {
-//           return res;
-//       })
-//       .catch((err) => console.log(err));
-// }
+ export const tokenValidity = () => {
+     return fetch(`${BASE_URL}/users/me`, {
+         method: 'GET',
+         headers: {
+             'Content-Type': "application/json",
+             "Authorization" : `Bearer ${localStorage.getItem('token')}`
+         }
+     })
+ }

@@ -13,7 +13,7 @@ import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
-import {register, authorization} from "../utils/mestoAuth";
+import {register, authorization, tokenValidity} from "../utils/mestoAuth";
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -46,6 +46,13 @@ function App() {
             document.addEventListener('keydown', handleEscClose);   
         }
     });
+    useEffect(() => {
+       tokenValidity()
+           .then(res => res.json())
+           .then((data) => {
+               console.log(data);
+           })
+    }, []);
 
     function closeAllPopups () {
         setEditAvatarPopupOpen(false);
@@ -95,12 +102,13 @@ function App() {
                 console.log(`Cтатус входа: ${res.status}`);
                 if(res.status === (400 || 401)) {
                     successfulRegistration(false);
+                    setIsOpenInfoTool(true);
                 }
                 return res.json();
             })
-            .then((res) => {
-                setIsOpenInfoTool(true);
-                console.log(res);
+            .then((data) => {
+                localStorage.setItem('token', data.token);
+                console.log(data.token);
             })
             .catch((e) => {
                 console.log(`Ошибка регистрации: ${e}`);
