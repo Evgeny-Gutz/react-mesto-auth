@@ -21,6 +21,7 @@
 * transition 
 * template
 * React
+* React Route
 
 **Figma**
 
@@ -28,7 +29,7 @@
 
 **GitHub Pages**
 
-* [Ссылка на сайт в GitHub Pages](https://evgeny-gutz.github.io/mesto-react/)
+* [Ссылка на сайт в GitHub Pages](https://github.com/Evgeny-Gutz/react-mesto-auth)
 
 **Картинки**
 
