@@ -13,25 +13,19 @@ import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
-import {register} from "../utils/mestoAuth";
+import {register, authorization} from "../utils/mestoAuth";
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
     const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
     const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState({isVisible:false, name: "", link: ""});
-    const [isSuccessfulRegistrationPopupOpen, setSuccessfulRegistrationPopupOpen] = useState(false);
+    const [isSuccessfulRequest, setIsSuccessfulRequest] = useState(true);
+    const [formValue, setFormValue] = useState({email: '', password: ''});
     const [currentUser, setCurrentUser] = useState({});
     const [cards, setCards] = useState([]);
     const [loggedIn, setLoggedIn] = useState(false);
-
-    function closeAllPopups () {
-        setEditAvatarPopupOpen(false);
-        setEditProfilePopupOpen(false);
-        setAddPlacePopupOpen(false);
-        setSelectedCard({...selectedCard, isVisible: false});
-        setSuccessfulRegistrationPopupOpen(false);
-    }
+    const [isOpenInfoTool, setIsOpenInfoTool] = useState(false);
 
     useEffect(()=> {
         api.getInitialCards()
@@ -39,7 +33,6 @@ function App() {
             .catch(error => console.log(`Ошибка при загрузке карточек: ${error}`))
     }, []);
     useEffect(() => {
-        setSuccessfulRegistrationPopupOpen(true);
         api.getDataUser()
             .then(res => setCurrentUser(res))
             .catch(error => console.log(`Ошибка при загрузке карточек: ${error}`))
@@ -53,6 +46,66 @@ function App() {
             document.addEventListener('keydown', handleEscClose);   
         }
     });
+
+    function closeAllPopups () {
+        setEditAvatarPopupOpen(false);
+        setEditProfilePopupOpen(false);
+        setAddPlacePopupOpen(false);
+        setSelectedCard({...selectedCard, isVisible: false});
+        setIsOpenInfoTool(false);
+    }
+    function successfulRegistration(value) {
+        setIsSuccessfulRequest(value);
+        setFormValue({...formValue, email: '', password: ''});
+    }
+    function changeFormValues(e) {
+        e.preventDefault();
+        const {name, value} = e.target;
+        setFormValue({
+            ...formValue,
+            [name]: value});
+    };
+
+    function handleSubmitRegistration(e) {
+        e.preventDefault();
+        register(formValue)
+            .then((res) => {
+                console.log(`Cтатус: ${res.status}`);
+                if(res.status === 400) {
+                    successfulRegistration(false);
+                }
+                else {
+                    successfulRegistration(true);
+                }
+                return res.json();
+            })
+            .then((res) => {
+                setIsOpenInfoTool(true);
+
+                console.log(res);
+            })
+            .catch((e) => {
+                console.log(`Ошибка регистрации: ${e}`);
+            });
+    }
+    function handleSubmitLogin(e) {
+        e.preventDefault();
+        authorization(formValue)
+            .then((res) => {
+                console.log(`Cтатус входа: ${res.status}`);
+                if(res.status === (400 || 401)) {
+                    successfulRegistration(false);
+                }
+                return res.json();
+            })
+            .then((res) => {
+                setIsOpenInfoTool(true);
+                console.log(res);
+            })
+            .catch((e) => {
+                console.log(`Ошибка регистрации: ${e}`);
+            });
+    }
 
     function handleCardClick (dataNameLink) {
         setSelectedCard({...selectedCard, isVisible: true, ...dataNameLink});
@@ -129,7 +182,7 @@ function App() {
                         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
                         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleUpdatePlace} />
                         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-                        <InfoTooltip isOpen={isSuccessfulRegistrationPopupOpen} onClose={closeAllPopups} itsOk={false}/>
+                        <InfoTooltip isOpen={isSuccessfulRequest} onClose={closeAllPopups} isOk={false}/>
                         <ImagePopup
                             onOpen={handleCardClick}
                             card={selectedCard}
@@ -137,8 +190,20 @@ function App() {
                     </>
                 } />
 
-                <Route path="/sign-up" element={<Register />}/>
-                <Route path="/sign-in" element={<Login />}/>
+                <Route path="/sign-up" element={<Register
+                    handleSubmitRegistration={handleSubmitRegistration}
+                    formValue={formValue}
+                    changeFormValues={changeFormValues}
+                    successful={isSuccessfulRequest}
+                    onClose={closeAllPopups}
+                    isOpenInfoTool={isOpenInfoTool}/>}/>
+                <Route path="/sign-in" element={<Login
+                    handleSubmitLogin={handleSubmitLogin}
+                    formValue={formValue}
+                    changeFormValues={changeFormValues}
+                    successful={isSuccessfulRequest}
+                    onClose={closeAllPopups}
+                    isOpenInfoTool={isOpenInfoTool}/>}/>
                 <Route path="/" element={<ProtectedRoute element={<Login />} loggedIn={loggedIn}/> } />
             </Routes>
         </UserContext.Provider>
