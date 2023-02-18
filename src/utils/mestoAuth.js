@@ -24,12 +24,12 @@ export const register = ({password, email}) => {
      });
  }
 
- export const tokenValidity = () => {
+ export const tokenValidity = (JWT) => {
      return fetch(`${BASE_URL}/users/me`, {
          method: 'GET',
          headers: {
              'Content-Type': "application/json",
-             "Authorization" : `Bearer ${localStorage.getItem('token')}`
+             "Authorization" : `Bearer ${JWT}`
          }
      })
  }
