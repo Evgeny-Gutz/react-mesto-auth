@@ -17,6 +17,7 @@ function App() {
     const [selectedCard, setSelectedCard] = useState({isVisible:false, name: "", link: ""});
     const [isSuccessfulRequest, setIsSuccessfulRequest] = useState(true);
     const [formValue, setFormValue] = useState({email: '', password: ''});
+    const [placeValues, setPlaceValues] = useState({name: '', link: '',});
     const [currentUser, setCurrentUser] = useState({});
     const [cards, setCards] = useState([]);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -88,7 +89,7 @@ function App() {
         setFormValue({
             ...formValue,
             [name]: value});
-    };
+    }
     function handleSubmitRegistration(e) {
         e.preventDefault();
         register(formValue)
@@ -103,13 +104,6 @@ function App() {
     function handleSubmitLogin(e) {
         e.preventDefault();
         authorization(formValue)
-            .then((res) => {
-                if(res.status === (400 || 401)) {
-                    successfulRegistration(false);
-                    setIsOpenInfoTool(true);
-                }
-                return res.json();
-            })
             .then((data) => {
                 setPersonEmail(formValue.email);
                 setLoggedIn(true);
@@ -118,6 +112,7 @@ function App() {
                 setFormValue({...formValue, email: '', password: ''});
             })
             .catch((error) => {
+                successfulRegistration(false);
                 console.log(`Ошибка входа: ${error}`);
             });
     }
@@ -160,7 +155,10 @@ function App() {
     }
     function handleUpdateUser({name, about}) {
         api.changeDataProfil({name, about})
-            .then(res => setCurrentUser(res))
+            .then((res) => {
+                setCurrentUser(res);
+                closeAllPopups();
+            })
             .catch(error => console.log(`Ошибка при обновлении профиля: ${error}`))
     }
     function handleUpdateAvatar({avatar}) {
@@ -170,11 +168,26 @@ function App() {
     }
     function handleUpdatePlace({name, link}) {
         api.addNewCard({name, link})
-            .then(newCard => setCards([newCard, ...cards]))
+            .then((newCard) => {
+                setCards([newCard, ...cards]);
+                closeAllPopups();
+                setPlaceValues({
+                    ...placeValues,
+                    name: "",
+                    link: "",
+                })
+            })
             .catch(error => console.log(`Ошибка при добавлении новой картоки: ${error}`))
     }
     function changeLoggedIn() {
         setLoggedIn(true);
+    }
+    function handleChangePlaceValues(e) {
+        const name = e.target.name;
+        setPlaceValues({
+            ...placeValues,
+            [name]: e.target.value,
+        })
     }
 
     return (
@@ -190,10 +203,7 @@ function App() {
                     <Login
                         handleSubmitLogin={handleSubmitLogin}
                         formValue={formValue}
-                        changeFormValues={changeFormValues}
-                        successful={isSuccessfulRequest}
-                        onClose={closeAllPopups}
-                        isOpenInfoTool={isOpenInfoTool}/>} />
+                        changeFormValues={changeFormValues}/>} />
                 <Route path="/" element={
                     <ProtectedRoute element={
                         PersonalPage} loggedIn={loggedIn}
@@ -206,8 +216,10 @@ function App() {
                             handleCardLike={handleCardLike}
                             handleCardDislike={handleCardDislike}
                             handleCardDelete={handleCardDelete}
+                            handleChangePlaceValues={handleChangePlaceValues}
                             cards={cards}
                             setCards={setCards}
+                            placeValues={placeValues}
                             selectedCard={selectedCard}
                             closeAllPopups={closeAllPopups}
                             isEditProfilePopupOpen={isEditProfilePopupOpen}

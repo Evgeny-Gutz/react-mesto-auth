@@ -4,31 +4,29 @@ import { UserContext } from "../contexts/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
 
 function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
+    const [profileValues, setProfileValues] = useState({name: '', about: ''});
     const currentUser = useContext(UserContext);
 
-    function handleChangeName(e) {
-        setName(e.target.value);
-    }
-
-    function handleChangeDescription(e) {
-        setDescription(e.target.value);
+    function handleChangeValues(e) {
+        const name = e.target.name;
+        setProfileValues({
+            ...profileValues,
+            [name]: e.target.value,
+        })
     }
 
     function handleSubmit(e) {
         e.preventDefault();
 
-        onUpdateUser({
-            name,
-            about: description,
-        });
-        onClose();
+        onUpdateUser(profileValues);
     }
 
     useEffect(() => {
-        setName(currentUser.name);
-        setDescription(currentUser.about)
+        setProfileValues({
+            ...profileValues,
+            name: currentUser.name,
+            about: currentUser.about,
+        })
     }, [currentUser, isOpen]);
 
     return (
@@ -39,15 +37,16 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
             onClose={onClose}
             valueSubmit={"Сохранить"}
             onSubmit={handleSubmit}>
-                { name && description && <><label className="popup__field">
-                    <input id="name-input" className="popup__input popup__input_type_name" type="text" name="name" value={name} onChange={handleChangeName} minLength="2" maxLength="40" required />
-                    <span className="name-input-error popup__input-error"></span>
-                </label>
-                <label className="popup__field">
-                    <input id="profession-input" className="popup__input popup__input_type_job" type="text" name="name" value={description} onChange={handleChangeDescription} minLength="2" maxLength="200" required />
-                    <span className="profession-input-error popup__input-error"></span>
-                </label>
-            </>}
+                <>
+                    <label className="popup__field">
+                        <input id="name-input" className="popup__input popup__input_type_name" type="text" name="name" value={profileValues.name} onChange={handleChangeValues} minLength="2" maxLength="40" required />
+                        <span className="name-input-error popup__input-error"></span>
+                    </label>
+                    <label className="popup__field">
+                        <input id="profession-input" className="popup__input popup__input_type_job" type="text" name="about" value={profileValues.about} onChange={handleChangeValues} minLength="2" maxLength="200" required />
+                        <span className="profession-input-error popup__input-error"></span>
+                    </label>
+                </>
         </PopupWithForm>
         
     );

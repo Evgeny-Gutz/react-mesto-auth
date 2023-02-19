@@ -23,8 +23,16 @@ const PersonalPage = (props) => {
                 cards={props.cards}
                 setCards={props.setCards} />
             <Footer />
-            <EditProfilePopup isOpen={props.isEditProfilePopupOpen} onClose={props.closeAllPopups} onUpdateUser={props.handleUpdateUser} />
-            <AddPlacePopup isOpen={props.isAddPlacePopupOpen} onClose={props.closeAllPopups} onAddPlace={props.handleUpdatePlace} />
+            <EditProfilePopup
+                isOpen={props.isEditProfilePopupOpen}
+                onClose={props.closeAllPopups}
+                onUpdateUser={props.handleUpdateUser} />
+            <AddPlacePopup
+                isOpen={props.isAddPlacePopupOpen}
+                onClose={props.closeAllPopups}
+                onAddPlace={props.handleUpdatePlace}
+                placeValues={props.placeValues}
+                handleChangePlaceValues={props.handleChangePlaceValues}/>
             <EditAvatarPopup isOpen={props.isEditAvatarPopupOpen} onClose={props.closeAllPopups} onUpdateAvatar={props.handleUpdateAvatar} />
             <ImagePopup
                 onOpen={props.handleCardClick}
