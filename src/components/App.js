@@ -64,6 +64,7 @@ function App() {
                 .then((res) => {
                     setPersonEmail(res.data.email);
                 })
+                .catch(error => console.log(`Ошибка при запросе токена: ${error}`))
         }
     }
     function closeAllPopups () {
