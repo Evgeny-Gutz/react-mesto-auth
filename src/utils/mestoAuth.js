@@ -9,7 +9,7 @@ export const register = ({password, email}) => {
         body: JSON.stringify({
             'password': password,
             'email': email})
-    });
+    }).then((res) => checkResponse(res));
 }
 
  export const authorization = ({password, email}) => {
@@ -21,7 +21,7 @@ export const register = ({password, email}) => {
          body: JSON.stringify({
              'password': password,
              'email': email})
-     });
+     }).then((res) => checkResponse(res));
  }
 
  export const tokenValidity = (JWT) => {
@@ -31,5 +31,9 @@ export const register = ({password, email}) => {
              'Content-Type': "application/json",
              "Authorization" : `Bearer ${JWT}`
          }
-     })
+     }).then((res) => checkResponse(res));
+ }
+
+ function checkResponse(res) {
+    return (res.ok) ? res.json(): Promise.reject(res.status);
  }

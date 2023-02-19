@@ -8,6 +8,7 @@ import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 import {register, authorization, tokenValidity} from "../utils/mestoAuth";
 import PersonalPage from "./PersonalPage";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -57,7 +58,7 @@ function App() {
                         changeLoggedIn();
                         navigate("/", {replace: true});
                     }
-                    return res.json();
+                    return res;
                 })
                 .then((res) => {
                     setPersonEmail(res.data.email);
@@ -72,8 +73,14 @@ function App() {
         setIsOpenInfoTool(false);
     }
     function successfulRegistration(value) {
-        setIsSuccessfulRequest(value);
-        setFormValue({...formValue, email: '', password: ''});
+        setIsOpenInfoTool(true);
+        if(value) {
+            setIsSuccessfulRequest(value);
+            setFormValue({...formValue, email: '', password: ''});
+        }
+        else {
+            setIsSuccessfulRequest(value);
+        }
     }
     function changeFormValues(e) {
         e.preventDefault();
@@ -86,22 +93,12 @@ function App() {
         e.preventDefault();
         register(formValue)
             .then((res) => {
-                console.log(`Cтатус: ${res.status}`);
-                if(res.status === 400) {
-                    successfulRegistration(false);
-                }
-                else {
-                    successfulRegistration(true);
-                }
-                return res.json();
-            })
-            .then((res) => {
-                setIsOpenInfoTool(true);
+                successfulRegistration(true);
                 navigate("/sign-in", {replace: true});
+            }).catch((error) => {
+                successfulRegistration(false);
+                console.log(`Ошибка регистрации: ${error}`);
             })
-            .catch((e) => {
-                console.log(`Ошибка регистрации: ${e}`);
-            });
     }
     function handleSubmitLogin(e) {
         e.preventDefault();
@@ -120,8 +117,8 @@ function App() {
                 navigate("/", {replace: true});
                 setFormValue({...formValue, email: '', password: ''});
             })
-            .catch((e) => {
-                console.log(`Ошибка регистрации: ${e}`);
+            .catch((error) => {
+                console.log(`Ошибка входа: ${error}`);
             });
     }
     function handleCardClick (dataNameLink) {
@@ -182,15 +179,13 @@ function App() {
 
     return (
         <UserContext.Provider value={currentUser}>
+            <InfoTooltip isOk={isSuccessfulRequest} onClose={closeAllPopups} isOpen={isOpenInfoTool}/>
             <Routes>
                 <Route path="/sign-up" element={
                     <Register
                         handleSubmitRegistration={handleSubmitRegistration}
                         formValue={formValue}
-                        changeFormValues={changeFormValues}
-                        successful={isSuccessfulRequest}
-                        onClose={closeAllPopups}
-                        isOpenInfoTool={isOpenInfoTool}/>}/>
+                        changeFormValues={changeFormValues}/>}/>
                 <Route path="/sign-in" element={
                     <Login
                         handleSubmitLogin={handleSubmitLogin}
