@@ -7,7 +7,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
     const [profileValues, setProfileValues] = useState({name: '', about: ''});
     const currentUser = useContext(UserContext);
 
-    function handleChangeValues(e) {
+    function handleChangeProfileValues(e) {
         const name = e.target.name;
         setProfileValues({
             ...profileValues,
@@ -39,11 +39,11 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
             onSubmit={handleSubmit}>
                 <>
                     <label className="popup__field">
-                        <input id="name-input" className="popup__input popup__input_type_name" type="text" name="name" value={profileValues.name} onChange={handleChangeValues} minLength="2" maxLength="40" required />
+                        <input id="name-input" className="popup__input popup__input_type_name" type="text" name="name" value={isOpen ? profileValues.name: ''} onChange={handleChangeProfileValues} minLength="2" maxLength="40" required />
                         <span className="name-input-error popup__input-error"></span>
                     </label>
                     <label className="popup__field">
-                        <input id="profession-input" className="popup__input popup__input_type_job" type="text" name="about" value={profileValues.about} onChange={handleChangeValues} minLength="2" maxLength="200" required />
+                        <input id="profession-input" className="popup__input popup__input_type_job" type="text" name="about" value={isOpen ? profileValues.about: ''} onChange={handleChangeProfileValues} minLength="2" maxLength="200" required />
                         <span className="profession-input-error popup__input-error"></span>
                     </label>
                 </>

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import Main from "./Main";
 import Footer from "./Footer";
 import EditProfilePopup from "./EditProfilePopup";
